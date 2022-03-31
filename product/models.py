@@ -15,7 +15,8 @@ class Category(models.Model):
 		return reverse('category_page', kwargs = {'slug': self.slug})	
 
 	def save(self, *args, **kwargs):
-		self.slug = slugify(self.name)
+		if not self.slug:
+			self.slug = slugify(self.name)
 		return super().save(*args, **kwargs)
 	
 	class Meta:
@@ -34,10 +35,11 @@ class Product(models.Model):
 		return f'{self.name}'
 
 	def get_absolute_url(self):
-		return reverse('category_page', kwargs = {'slug': self.slug})	
+		return reverse('product_detail', kwargs = {'category_slug': self.category.slug, 'product_slug': self.slug})	
 
 	def save(self, *args, **kwargs):
-		self.slug = slugify(self.name)
+		if not self.slug:
+			self.slug = slugify(self.name)
 		return super().save(*args, **kwargs)
 	
 	class Meta:
